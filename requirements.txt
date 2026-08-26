@@ -1,0 +1,52 @@
+# CabinSense - dependencies (all models run locally; no paid APIs)
+#
+# IMPORTANT: install PyTorch + torchvision FIRST from the CUDA index matching your
+# system, then install this file. For CPU-only use the default PyPI wheels.
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126
+#   pip install -r requirements.txt
+
+# --- Deep learning / models ---
+timm                          # backbones (MobileNetV3, MobileViT)
+sixdrepnet                    # 6DRepNet robust head-pose (auto-downloads weights)
+ultralytics                   # COCO YOLO object detection (phone, drinking); GPU via torch
+
+# --- L2CS-Net gaze (not on PyPI; install from source) ---
+# Run these AFTER the CUDA torch install, with --no-deps to protect the CUDA build:
+#   pip install --no-deps git+https://github.com/Ahmednull/L2CS-Net.git
+#   pip install --no-deps face-detection   # only to satisfy l2cs import (RetinaFace unused;
+#                                           # our code shims it and uses YuNet for detection)
+onnx                          # model export
+onnxscript                    # required by torch.onnx.export (Torch 2.x exporter)
+onnxruntime-gpu               # inference + INT8 quantization (onnxruntime.quantization)
+huggingface_hub[hf_xet]       # pulling model/dataset artifacts
+
+# --- Vision / data ---
+opencv-python                 # image/video IO, webcam, YuNet detector
+pillow
+# Augmentation (lighting/occlusion/pose) uses torchvision.transforms.v2 + OpenCV,
+# not albumentations, which pulls a source-only stringzilla that fails to build on
+# this Windows/MSVC toolchain.
+
+# --- Experiment tracking ---
+mlflow                        # local file-backend experiment tracking
+
+# --- Scientific stack ---
+numpy
+pandas
+scipy
+scikit-learn
+
+# --- Visualization ---
+matplotlib
+seaborn
+
+# --- Notebook / tooling ---
+jupyter
+nbformat
+nbclient
+ipykernel
+pytest
+ruff
+
+# --- Optional dataset access (used only by data scripts) ---
+datasets

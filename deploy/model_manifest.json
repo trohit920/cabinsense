@@ -1,0 +1,99 @@
+{
+  "models": {
+    "drowsiness": {
+      "file": "drowsiness.int8.onnx",
+      "input_name": "input",
+      "input_shape": [
+        1,
+        3,
+        128,
+        128
+      ],
+      "layout": "NCHW",
+      "color": "RGB",
+      "mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "std": [
+        0.229,
+        0.224,
+        0.225
+      ],
+      "output_names": [
+        "output"
+      ],
+      "classes": [
+        "Drowsy",
+        "Non Drowsy"
+      ],
+      "activation": "softmax"
+    },
+    "multitask": {
+      "file": "multitask.int8.onnx",
+      "input_name": "input",
+      "input_shape": [
+        1,
+        3,
+        128,
+        128
+      ],
+      "layout": "NCHW",
+      "color": "RGB",
+      "mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "std": [
+        0.229,
+        0.224,
+        0.225
+      ],
+      "output_names": [
+        "output"
+      ],
+      "tasks": [
+        "glasses",
+        "cap",
+        "seatbelt",
+        "phone",
+        "smoking",
+        "yawn"
+      ],
+      "activation": "sigmoid",
+      "threshold": 0.5
+    }
+  },
+  "detectors": {
+    "face": {
+      "file": "yunet.onnx",
+      "type": "yunet",
+      "input_size": [
+        320,
+        320
+      ]
+    },
+    "landmarks": {
+      "file": "pfld.onnx",
+      "type": "pfld",
+      "num_points": 98,
+      "input_size": 112
+    }
+  },
+  "thresholds": {
+    "ear_closed": 0.2,
+    "mar_yawn": 0.6,
+    "perclos_drowsy_ratio": 0.15,
+    "distraction_off_road_ratio": 0.6,
+    "min_confidence": 0.55
+  },
+  "temporal": {
+    "perclos_window_s": 30.0,
+    "distraction_window_s": 2.0,
+    "smoothing_window_s": 1.0,
+    "hysteresis_on_ratio": 0.6,
+    "hysteresis_off_ratio": 0.4
+  }
+}

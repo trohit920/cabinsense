@@ -1,0 +1,52 @@
+{
+  "drowsiness.int8.onnx": {
+    "median_ms": 13.21509999979753,
+    "p95_ms": 20.779824999772245,
+    "mean_ms": 14.434789999795612,
+    "fps": 75.6710127063224,
+    "size_mb": 1.7,
+    "providers": [
+      "CPUExecutionProvider"
+    ]
+  },
+  "drowsiness.onnx": {
+    "median_ms": 2.0684499977505766,
+    "p95_ms": 4.125335002026985,
+    "mean_ms": 2.270141999615589,
+    "fps": 483.4537944293999,
+    "size_mb": 6.09,
+    "providers": [
+      "CPUExecutionProvider"
+    ]
+  },
+  "multitask.int8.onnx": {
+    "median_ms": 15.710749998106621,
+    "p95_ms": 23.977155004831726,
+    "mean_ms": 17.063267999037635,
+    "fps": 63.650685048168604,
+    "size_mb": 1.71,
+    "providers": [
+      "CPUExecutionProvider"
+    ]
+  },
+  "multitask.onnx": {
+    "median_ms": 1.4661999957752414,
+    "p95_ms": 2.202715001476463,
+    "mean_ms": 1.6246669998508878,
+    "fps": 682.0351949811991,
+    "size_mb": 6.11,
+    "providers": [
+      "CPUExecutionProvider"
+    ]
+  },
+  "yunet.onnx": {
+    "median_ms": 3.8200499984668568,
+    "p95_ms": 11.583295012678718,
+    "mean_ms": 4.938600999012124,
+    "fps": 261.7766784207906,
+    "size_mb": 0.23,
+    "providers": [
+      "CPUExecutionProvider"
+    ]
+  }
+}

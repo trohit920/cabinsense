@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Data (large; downloaded locally, not committed)
+data/raw/
+data/cache/
+data/videos/
+data/_extract/
+data/detect_custom/
+data/seatbelt_yolo/
+*.zip
+*.tar
+*.tar.gz
+
+# Training / run artifacts (regenerated)
+outputs/checkpoints/
+outputs/mlruns/
+runs/
+.tmp/
+
+# Model weights (large binaries)
+*.pt
+*.pth
+*.onnx
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Note: small result JSONs and figures under outputs/ ARE committed as artifacts.

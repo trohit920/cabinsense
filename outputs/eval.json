@@ -1,0 +1,44 @@
+{
+  "drowsiness": {
+    "clean": {
+      "accuracy": 0.9998803684651274,
+      "f1_macro": 0.9998797447469681
+    },
+    "degraded": {
+      "accuracy": 0.9988036846512741,
+      "f1_macro": 0.9987975511760723
+    }
+  },
+  "multitask": {
+    "glasses": {
+      "accuracy": 0.9889250814332248,
+      "f1": 0.9137055837563451,
+      "support": 1535
+    },
+    "cap": {
+      "accuracy": 0.9837133550488599,
+      "f1": 0.7899159663865546,
+      "support": 1535
+    },
+    "seatbelt": {
+      "accuracy": NaN,
+      "f1": NaN,
+      "support": 0
+    },
+    "phone": {
+      "accuracy": NaN,
+      "f1": NaN,
+      "support": 0
+    },
+    "smoking": {
+      "accuracy": NaN,
+      "f1": NaN,
+      "support": 0
+    },
+    "yawn": {
+      "accuracy": NaN,
+      "f1": NaN,
+      "support": 0
+    }
+  }
+}
