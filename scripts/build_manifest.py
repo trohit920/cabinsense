@@ -45,10 +45,10 @@ def build_manifest() -> dict:
     return {
         "models": {
             "drowsiness": _classifier_spec(
-                "drowsiness.int8.onnx", {"classes": list(DROWSINESS_CLASSES), "activation": "softmax"}
+                "drowsiness.onnx", {"classes": list(DROWSINESS_CLASSES), "activation": "softmax"}
             ),
             "multitask": _classifier_spec(
-                "multitask.int8.onnx",
+                "multitask.onnx",
                 {"tasks": list(config.ATTRIBUTE_TASKS), "activation": "sigmoid", "threshold": 0.5},
             ),
         },

@@ -38,8 +38,9 @@ Selecting a provider is a session-option change, not a code change.
 
 1. **fp32** ONNX - reference.
 2. **fp16** - halves size, ~free on GPU/NPU.
-3. **INT8 dynamic** (shipped, `*.int8.onnx`) - calibration-free, smaller + faster on
-   CPU/edge; the primary on-device path.
+3. **INT8 dynamic** (`*.int8.onnx`) - calibration-free and 3.6x smaller, but 6-11x
+   slower than fp32 on CPU for these backbones (`outputs/benchmark.json`). Use it only
+   where flash or RAM is the binding constraint; fp32 is the default.
 4. **INT8 static (QDQ)** - better conv speedups; add a calibration reader over a few
    hundred representative frames. Documented follow-on.
 5. **TensorRT engine** - build from the ONNX for maximum throughput on NVIDIA SoCs.

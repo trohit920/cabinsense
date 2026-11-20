@@ -53,8 +53,7 @@ end-to-end. Read it as a systems demo, not an accuracy claim - see
   ~half the pixels at higher effective resolution on small objects; a full-frame sweep
   runs every few seconds to recount occupants and re-localize the driver. A
   `drive_side` flag (LHD/RHD, auto-initialized from the driver's position) selects the
-  driver and mirrors the gaze zones. On the sample clip: 141/145 frames ROI-only, 4
-  full sweeps.
+  driver and mirrors the gaze zones.
 - **Edge-first**: small backbones (MobileNetV3 / MobileViT), ONNX + INT8 quantization,
   and accuracy-vs-latency benchmarking.
 - **Port-ready**: the runtime `core/` uses only ops with direct C/C++ equivalents; a
@@ -122,24 +121,26 @@ alone, well inside a 30 FPS camera budget with headroom to spare. These figures 
 the ONNX face/attribute chain only; 6DRepNet, L2CS, and the YOLO detectors run in
 PyTorch and are not in the benchmark - see limits below.
 
-### INT8 made these models 3.6x smaller and 6-10x slower
+### INT8 made these models 3.6x smaller and 6-11x slower
 
 This is the most useful thing the benchmark surfaced, and it runs against the
 default assumption that quantization is a free win.
 
-Dynamic INT8 quantization stores weights as int8 but **dequantizes them back to
-float at inference time**, per operator, on every call. That trade pays off when the
-convolution arithmetic it accelerates dominates the runtime. On MobileNetV3-Small at
+Dynamic INT8 quantization stores weights as int8 and, on every call, computes
+activation scales at run time and wraps each quantized operator in quantize and
+dequantize steps. That trade pays off when the convolution arithmetic it accelerates
+dominates the runtime. On MobileNetV3-Small at
 128x128 the convolutions are already tiny - a 1.5-2 ms forward pass - so the
-per-operator quantize/dequantize overhead is not amortized; it *is* the runtime.
+per-operator quantize/dequantize overhead is likely not amortized (no operator
+profile is saved, so this is the probable mechanism rather than a measured one).
 The result is a 6.4x latency regression on the drowsiness model and 10.7x on the
 multi-task model, for a 3.6x size reduction.
 
 Where each variant is the right choice:
 
 - **fp32** wherever compute is the constraint. It is strictly faster here.
-- **INT8** only where flash/RAM footprint is the binding constraint (3.6 MB saved
-  across both models) and a ~15 ms budget per model is acceptable.
+- **INT8** only where flash/RAM footprint is the binding constraint (about 8.8 MB saved
+  across both models, 3.6x smaller each) and a ~15 ms budget per model is acceptable.
 - **Static INT8 (QDQ)** is the documented follow-on: it folds the quantization into
   the graph and removes the per-call dequantize, which is what would actually make
   INT8 faster here. It needs a calibration set, so it is scoped, not claimed.

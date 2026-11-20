@@ -1,8 +1,9 @@
 """INT8 quantization of ONNX models via ONNX Runtime.
 
-Dynamic INT8 quantization is the primary, calibration-free path (weights to int8),
-which shrinks the model and speeds CPU/edge inference while keeping the graph and the
-core logic unchanged. Static (QDQ) quantization and TensorRT are documented as
+Dynamic INT8 quantization is the calibration-free path (weights to int8). It shrinks
+the classifiers about 3.6x, but on CPU it measured 6-11x slower than fp32 for these
+small MobileNetV3 backbones (outputs/benchmark.json), so fp32 is the runtime default
+and INT8 is only for flash- or RAM-bound targets. Static (QDQ) quantization and TensorRT are documented as
 optional follow-ons in DEPLOYMENT.md.
 """
 

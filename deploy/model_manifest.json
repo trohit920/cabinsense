@@ -1,7 +1,7 @@
 {
   "models": {
     "drowsiness": {
-      "file": "drowsiness.int8.onnx",
+      "file": "drowsiness.onnx",
       "input_name": "input",
       "input_shape": [
         1,
@@ -31,7 +31,7 @@
       "activation": "softmax"
     },
     "multitask": {
-      "file": "multitask.int8.onnx",
+      "file": "multitask.onnx",
       "input_name": "input",
       "input_shape": [
         1,

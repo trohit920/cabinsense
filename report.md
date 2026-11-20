@@ -133,7 +133,7 @@ are not part of this classification table.
 ### 6.2 Latency, throughput, and size (`outputs/benchmark.json`)
 
 ONNX Runtime, `CPUExecutionProvider`, 100 iterations after warmup, random inputs at
-the manifest's static shapes.
+each graph's own input shape (dynamic dimensions filled with the face-crop size).
 
 | Model | Median | p95 | FPS | Size |
 |---|---|---|---|---|
@@ -147,17 +147,18 @@ The fp32 chain (detect -> drowsiness -> attributes) costs ~7.4 ms per frame, abo
 135 FPS, on CPU with no accelerator. A 30 FPS camera leaves ~26 ms of headroom per
 frame for landmarks, geometry, and fusion.
 
-### 6.3 The INT8 result: 3.6x smaller, 6-10x slower
+### 6.3 The INT8 result: 3.6x smaller, 6-11x slower
 
 The quantization step produced a regression, and it is the most transferable finding
 in the project.
 
-Dynamic INT8 quantization stores weights as int8 and **dequantizes them back to
-float at inference time, per operator, on every call.** That is a good trade when
+Dynamic INT8 quantization stores weights as int8 and, **on every call, computes
+activation scales and wraps each quantized operator in quantize and dequantize
+steps.** That is a good trade when
 the convolution arithmetic being accelerated dominates the runtime budget. It is a
 bad trade here: MobileNetV3-Small at 128x128 already runs a 1.5-2 ms forward pass,
-so the per-operator quantize/dequantize work is never amortized - it becomes the
-dominant cost. Measured: **6.4x slower** on the drowsiness model, **10.7x slower** on
+so the per-operator quantize/dequantize work is likely never amortized and becomes
+the dominant cost (probable mechanism; no operator profile is saved). Measured: **6.4x slower** on the drowsiness model, **10.7x slower** on
 the multi-task model, in exchange for a **3.6x** size reduction.
 
 This changes the deployment recommendation rather than invalidating the work:
@@ -165,7 +166,7 @@ This changes the deployment recommendation rather than invalidating the work:
 | Constraint | Right variant | Why |
 |---|---|---|
 | Compute-bound | fp32 | Strictly faster on this backbone; already meets 30 FPS with margin |
-| Flash/RAM-bound | INT8 dynamic | 3.6 MB saved across both models, if ~15 ms/model is affordable |
+| Flash/RAM-bound | INT8 dynamic | About 8.8 MB saved across both models (3.6x smaller each), if ~15 ms/model is affordable |
 | Both | INT8 static (QDQ) | Folds quantization into the graph, removing the per-call dequantize - needs a few hundred calibration frames |
 | GPU/NPU target | fp16 | Native accelerator path on automotive silicon; the likely real win |
 
